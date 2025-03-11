@@ -13,11 +13,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Scaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -83,11 +83,7 @@ fun CreateScreen(navController: NavController, createViewModel: CreaArticleViewM
         Column(modifier = Modifier.padding(padding)) {
 
             CreateContent(
-                onCreate = {
-                           articleTitle,
-                           articleDesc,
-                           articleImageUrl,
-                           selectedValueForCategory ->
+                onCreate = {articleTitle, articleDesc, articleImageUrl,selectedValueForCategory ->
                     createViewModel.addArticle(
                         articleTitle,
                         articleDesc,

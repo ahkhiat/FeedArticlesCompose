@@ -62,7 +62,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -79,33 +79,24 @@ dependencies {
     val compose_version = "1.6.0"
 
     implementation ("androidx.compose.ui:ui:$compose_version")
-    implementation ("androidx.compose.material:material:$compose_version")
     implementation ("androidx.compose.ui:ui-tooling-preview:$compose_version")
     implementation ("androidx.compose.animation:animation:$compose_version")
 
     implementation ("com.squareup.moshi:moshi-kotlin:1.12.0")
-
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
-
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-
     implementation ("com.auth0.android:jwtdecode:2.0.2")
 
     val hiltVersion = "2.55"
-
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
-
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
-//    implementation ("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
-
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
 
-    implementation ("androidx.compose.material3:material3:1.0.0")
 
 }

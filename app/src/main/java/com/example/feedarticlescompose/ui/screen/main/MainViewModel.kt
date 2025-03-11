@@ -99,13 +99,15 @@ class MainViewModel @Inject constructor(
     }
 
 
-//    fun navigateIfUserIsOwner(article: ArticleDTO): NavDirections {
-//        val userId = _currentUserId.value
-//        return if (userId == article.idUser)
-//            MainFragmentDirections.actionMainFragmentToEditArticleFragment(article)
-//        else
-//            MainFragmentDirections.actionMainFragmentToDetailsArticleFragment(article)
-//    }
+    fun navigateIfUserIsOwner(idUser: Long) {
+        if (_currentUserId.value == idUser) {
+            viewModelScope.launch {
+                _mainSharedFlow.emit(Screen.Edit.route)
+            }
+        }
+
+    }
+
 }
 sealed class SessionState {
     data object Idle : SessionState()

@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.RadioButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -33,9 +32,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -75,20 +76,25 @@ fun MainScreen(
     val filteredArticlesList by mainViewModel.filteredArticles.collectAsState()
 
     val direction by authViewModel.directionStateFlow.collectAsState()
-    var selectedArticle by remember {
-        mutableStateOf<ArticleDTO?>(null)
-    }
-    var selectedValueForCategory by remember { mutableStateOf(0) }
-    val context = LocalContext.current
+    val isLoading by mainViewModel.isLoading.collectAsState()
 
+    var selectedArticle by remember { mutableStateOf<ArticleDTO?>(null) }
+    var selectedValueForCategory by remember { mutableStateOf(0) }
+
+
+    val context = LocalContext.current
 
     LaunchedEffect(true) {
         mainViewModel.mainSharedFlow.collect { direction ->
             direction?.let {
-                navController.navigate(it) {
-                    popUpTo("main") {
-                        inclusive = true
+                if (it == Screen.Login.route) {
+                    navController.navigate(it) {
+                        popUpTo("main") {
+                            inclusive = true
+                        }
                     }
+                } else {
+                    navController.navigate(it)
                 }
             }
         }
@@ -131,71 +137,37 @@ fun MainScreen(
             )
         },
         bottomBar = {
-            BottomAppBar (
+            BottomAppBar(
                 modifier = Modifier.height(50.dp)
             ) {
+                val categories = listOf(
+                    0 to R.string.btn_all,
+                    1 to R.string.btn_sport,
+                    2 to R.string.btn_manga,
+                    3 to R.string.btn_misc
+                )
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    RadioButton(
-                        selected = selectedValueForCategory == 0,
-                        onClick = {
-                            selectedValueForCategory = 0
-                            mainViewModel.setSelectedCategory(0)
-                        },
-                        colors = getRadioButtonColors()
-                    )
-                    Text(
-                        text = context.getString(R.string.btn_all),
-                        modifier = Modifier.clickable {
-                            selectedValueForCategory = 0
-                        }
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    RadioButton(
-                        selected = selectedValueForCategory == 1,
-                        onClick = {
-                            selectedValueForCategory = 1
-                            mainViewModel.setSelectedCategory(1)
-                        },
-                        colors = getRadioButtonColors()
-                    )
-                    Text(
-                        text = context.getString(R.string.btn_sport),
-                        modifier = Modifier.clickable {
-                            selectedValueForCategory = 1
-                        }
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    RadioButton(
-                        selected = selectedValueForCategory == 2,
-                        onClick = {
-                            selectedValueForCategory = 2
-                            mainViewModel.setSelectedCategory(2)
-                        },
-                        colors = getRadioButtonColors()
-                    )
-                    Text(
-                        text = context.getString(R.string.btn_manga),
-                        modifier = Modifier.clickable {
-                            selectedValueForCategory = 2
-                        }
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    RadioButton(
-                        selected = selectedValueForCategory == 3,
-                        onClick = {
-                            selectedValueForCategory = 3
-                            mainViewModel.setSelectedCategory(3)
-                        },
-                        colors = getRadioButtonColors()
-                    )
-                    Text(
-                        text = context.getString(R.string.btn_misc),
-                        modifier = Modifier.clickable {
-                            selectedValueForCategory = 3
-                        }
-                    )
+                    categories.forEach { (categoryId, stringRes) ->
+                        RadioButton(
+                            selected = selectedValueForCategory == categoryId,
+                            onClick = {
+                                selectedValueForCategory = categoryId
+                                mainViewModel.setSelectedCategory(categoryId)
+                            },
+                            colors = getRadioButtonColors()
+                        )
+                        Text(
+                            text = context.getString(stringRes),
+                            modifier = Modifier.clickable {
+                                selectedValueForCategory = categoryId
+                                mainViewModel.setSelectedCategory(categoryId)
+                            }
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                    }
                 }
             }
         },
@@ -209,44 +181,66 @@ fun MainScreen(
                 MainContent(
                     filteredArticlesList,
                     onClick = {
-//                        navController.navigate("edit")
-                        selectedArticle = if(selectedArticle == it) null else it
+                        selectedArticle = if (selectedArticle == it) null else it
+                        selectedArticle?.idUser?.let { idUser ->
+                            mainViewModel.navigateIfUserIsOwner(idUser)
+                        }
                     },
-                    selectedArticle = selectedArticle
+                    selectedArticle = selectedArticle,
+                    isRefreshing = isLoading,
+                    onRefresh = {
+                        mainViewModel.getArticles()
+                    }
                 )
             }
         }
     )
 }
 
+
 @Composable
+@ExperimentalMaterial3Api
 fun MainContent(
     articlesList: List<ArticleDTO>,
     onClick: (ArticleDTO) -> Unit,
-    selectedArticle: ArticleDTO?
+    selectedArticle: ArticleDTO?,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceEvenly,
-        horizontalAlignment = Alignment.CenterHorizontally
+
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier
     ) {
-        LazyColumn {
-            items(
-                items = articlesList,
-                key = { it.id }
-            ) {article ->
-                val isSelected = article == selectedArticle
-                val scale by animateFloatAsState(if(isSelected) 1.5f else 1f, label = "")
-                ItemView(
-                    article = article,
-                    isSelected = isSelected,
-                    onClick = { onClick(article) },
-                    scale = scale
-                )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            LazyColumn {
+                items(
+                    items = articlesList,
+                    key = { it.id }
+                ) {article ->
+                    val isSelected = article == selectedArticle
+                    val scale by animateFloatAsState(if(isSelected) 1.5f else 1f, label = "")
+                    ItemView(
+                        article = article,
+                        isSelected = isSelected,
+                        onClick = { onClick(article) },
+                        scale = scale
+                    )
+                }
             }
         }
+
     }
+
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -282,7 +276,9 @@ fun ItemView(
                 .width(380.dp)
                 .wrapContentHeight(),
             elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-            onClick = { onClick(article) }
+            onClick = {
+                onClick(article)
+            }
         ) {
             Row(
                 modifier = Modifier

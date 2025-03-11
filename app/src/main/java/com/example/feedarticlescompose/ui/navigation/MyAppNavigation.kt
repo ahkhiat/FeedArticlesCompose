@@ -51,8 +51,11 @@ fun MyAppNavigation() {
             val authViewModel: AuthViewModel = hiltViewModel()
             MainScreen(navController,mainViewModel, authViewModel)
         }
-        composable(Screen.Edit.route) {
-            EditScreen()
+        composable(
+            Screen.Edit.route + "/{articleId}"
+        ) { navBackStackEntry ->
+            val articleId = navBackStackEntry.arguments?.getString("articleId")
+            EditScreen(navController, articleId)
         }
         composable(Screen.Create.route) {
             val createViewModel: CreaArticleViewModel = hiltViewModel()
