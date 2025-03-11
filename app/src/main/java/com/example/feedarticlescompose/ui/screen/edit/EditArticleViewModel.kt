@@ -51,13 +51,13 @@ class EditArticleViewModel @Inject constructor(
                             catId
                         ))
                     }
-                    when (result?.status) {
-                        1 -> _articlesState.value = ArticleState.Success
-                        0 ->  _articlesState.value = ArticleState.Unchanged
-                        -1 -> _articlesState.value = ArticleState.ParamIssue
-                        -2 -> _articlesState.value = ArticleState.IdIssue
-                        5 -> _articlesState.value = ArticleState.Forbidden
-                    }
+//                    when (result?.status) {
+//                        1 -> _articlesState.value = ArticleState.Success
+//                        0 ->  _articlesState.value = ArticleState.Unchanged
+//                        -1 -> _articlesState.value = ArticleState.ParamIssue
+//                        -2 -> _articlesState.value = ArticleState.IdIssue
+//                        5 -> _articlesState.value = ArticleState.Forbidden
+//                    }
                 } catch(e: Exception) {
                     Log.e("EditArticleViewModel", "API call failed: ${e.localizedMessage}", e)
                 }
@@ -73,12 +73,12 @@ class EditArticleViewModel @Inject constructor(
                 val result = withContext(Dispatchers.IO) {
                     api.getApi().deleteArticle(articleId.toLong())
                 }
-                when (result?.status) {
-                    1 -> _articlesState.value = ArticleState.DeleteSuccess
-                    0 ->  _articlesState.value = ArticleState.Undeleted
-                    -1 -> _articlesState.value = ArticleState.ParamIssue
-                    5 -> _articlesState.value = ArticleState.Forbidden
-                }
+//                when (result?.status) {
+//                    1 -> _articlesState.value = ArticleState.DeleteSuccess
+//                    0 ->  _articlesState.value = ArticleState.Undeleted
+//                    -1 -> _articlesState.value = ArticleState.ParamIssue
+//                    5 -> _articlesState.value = ArticleState.Forbidden
+//                }
             } catch(e: Exception) {
                 Log.e("DeleteArticleViewModel", "API call failed: ${e.localizedMessage}", e)
             }

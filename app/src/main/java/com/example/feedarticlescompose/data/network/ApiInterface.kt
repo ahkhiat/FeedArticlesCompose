@@ -29,17 +29,15 @@ interface ApiInterface {
     suspend fun registerUser(@Body user: AuthDTO): Response<StatusAuthDTO>
 
     @GET(".")
-    suspend fun getAllArticles(): Response <List<ArticleDTO>?>
+    suspend fun getAllArticles(): Response<List<ArticleDTO>?>
 
     @PUT(".")
-    suspend fun insertArticle(@Body article: CreaArticleDTO): StatusDTO
+    suspend fun insertArticle(@Body article: CreaArticleDTO): Response<Unit>
 
     @POST(ApiRoutes.UPDATE_ARTICLE)
-    suspend fun updateArticle(@Path("id") articleId: Long, @Body updateArticle: UpdateArticleDTO): StatusDTO?
+    suspend fun updateArticle(@Path("id") articleId: Long, @Body updateArticle: UpdateArticleDTO): Response<StatusDTO?>
 
     @DELETE(ApiRoutes.DELETE_ARTICLE)
-    suspend fun deleteArticle(@Path("id") articleId: Long): StatusDTO?
+    suspend fun deleteArticle(@Path("id") articleId: Long): Response<StatusDTO?>
 
-    @PUT(ApiRoutes.TOGGLE_FAV)
-    suspend fun toggleFavorite(@Path("id") articleId: Long): StatusDTO?
 }

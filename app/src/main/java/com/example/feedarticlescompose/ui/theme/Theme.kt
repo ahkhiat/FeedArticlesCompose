@@ -24,7 +24,9 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = MangaColor,
     onSecondary = SportColor,
     onTertiary = MiscColor
-
+//    onPrimary = Color.White,
+//    onSecondary = Color.Black,
+//    onTertiary = Color.White
 
 )
 
@@ -33,6 +35,9 @@ private val LightColorScheme = lightColorScheme(
     secondary = PurpleGrey40,
     tertiary = Pink40,
     surfaceTint = FeedArticlesColor,
+//    onPrimary = Color.White,
+//    onSecondary = Color.Black,
+//    onTertiary = Color.White
     onPrimary = MangaColor,
     onSecondary = SportColor,
     onTertiary = MiscColor

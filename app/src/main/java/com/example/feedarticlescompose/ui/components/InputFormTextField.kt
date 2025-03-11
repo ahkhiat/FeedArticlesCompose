@@ -25,23 +25,17 @@ import com.example.feedarticlescompose.ui.theme.FeedArticlesColor
 fun InputFormTextField(
         value: String,
         onValueChange: (String) -> Unit,
+        maxLines: Int? = null,
         label: String,
-        visualTransformation: Boolean? = false
+        visualTransformation: Boolean? = false,
+        modifier: Modifier = Modifier,
+        singleLine: Boolean = true
 ) {
-//    OutlinedTextField(
-//        value = value,
-//        onValueChange = onValueChange,
-//        label = { Text(label) },
-//        modifier = Modifier
-//            .fillMaxWidth(),
-//        visualTransformation = if(visualTransformation!!) PasswordVisualTransformation()
-//                                    else VisualTransformation.None
-//    )
-
     TextField(
         value = value,
         onValueChange = { onValueChange(it) },
-        modifier = Modifier
+        maxLines = maxLines ?: 1,
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .background(Color.White),
@@ -50,14 +44,14 @@ fun InputFormTextField(
         placeholder = {
             Text(
                 text = label,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.surfaceTint
             )
         },
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
         ),
-        singleLine = true
+        singleLine = singleLine
     )
 }
 

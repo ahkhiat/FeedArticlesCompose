@@ -12,9 +12,5 @@ sealed class ArticleState {
     object Undeleted : ArticleState()
     object DeleteSuccess : ArticleState()
     object Uncompleted: ArticleState()
-}
-
-sealed class FavoriteState {
-    object isFavorite: FavoriteState()
-    object isNotFavorite: FavoriteState()
+    object Error: ArticleState()
 }

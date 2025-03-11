@@ -1,20 +1,21 @@
 package com.example.feedarticlescompose.ui.screen.create
 
 import android.util.Log
-import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.feedarticlescompose.R
 import com.devid_academy.feedarticlescompose.data.api.ApiService
-import com.devid_academy.feedarticlescompose.data.dto.ArticleDTO
 import com.devid_academy.feedarticlescompose.data.dto.CreaArticleDTO
 import com.devid_academy.feedarticlescompose.data.manager.PreferencesManager
+import com.devid_academy.feedarticlescompose.ui.screen.auth.AuthEvent
+import com.devid_academy.feedarticlescompose.ui.screen.auth.LoginState
 import com.devid_academy.feedarticlescompose.utils.ArticleState
-import com.devid_academy.feedarticlescompose.utils.makeToast
+import com.example.feedarticlescompose.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,47 +26,79 @@ class CreaArticleViewModel @Inject constructor(
     private val apiService: ApiService
 ): ViewModel() {
 
-    private val _articlesState = MutableLiveData<ArticleState>(ArticleState.Idle)
-    val articlesState: LiveData<ArticleState> = _articlesState
+    private val _createStateFlow = MutableStateFlow<ArticleState>(ArticleState.Idle)
+    val createStateFlow: StateFlow<ArticleState> = _createStateFlow
+
+    private val _createSharedFlow = MutableSharedFlow<ArticleEvent?>()
+    val createSharedFlow: SharedFlow<ArticleEvent?> = _createSharedFlow
 
     fun addArticle(
         articleTitle: String,
         articleDesc: String,
         articleImageUrl: String,
         selectedValueForCategory: String
-    ){
-        if(articleTitle.isNotEmpty() && articleDesc.isNotEmpty() &&
-            articleImageUrl.isNotEmpty() && selectedValueForCategory.isNotEmpty())
-            viewModelScope.launch {
-                _articlesState.value = ArticleState.Loading
+    ) {
+        viewModelScope.launch {
+            if (
+                articleTitle.isNotEmpty() &&
+                articleDesc.isNotEmpty() &&
+                articleImageUrl.isNotEmpty() &&
+                selectedValueForCategory.isNotEmpty()
+            ) {
+                _createStateFlow.value = ArticleState.Loading
                 val userId = preferencesManager.getUserId()
                 val catId = selectedValueForCategory.toInt()
                 try {
-                    val result = withContext(Dispatchers.IO) {
-                        apiService.getApi().insertArticle(CreaArticleDTO(
-                            articleTitle,
-                            articleDesc,
-                            articleImageUrl,
-                            catId,
-                            userId
-                        ))
+                    val response = withContext(Dispatchers.IO) {
+                        apiService.getApi().insertArticle(
+                            CreaArticleDTO(
+                                articleTitle,
+                                articleDesc,
+                                articleImageUrl,
+                                catId,
+                                userId
+                            )
+                        )
                     }
-                    when (result.status) {
-                        1 -> _articlesState.value = ArticleState.Success
-                        0 ->  _articlesState.value = ArticleState.NoCreation
-                        -1 -> _articlesState.value = ArticleState.ParamIssue
-                        5 -> _articlesState.value = ArticleState.Forbidden
+                    Log.i("VM CREATE", "Response : $response")
+                    if (response.isSuccessful) {
+                        _createStateFlow.value = ArticleState.Success
+                        _createSharedFlow.emit(ArticleEvent.NavigateToMainScreen)
+                    } else when (response.code()) {
+                        401 -> {
+                            Log.i("VM LOGIN", "Erreur 401 Creation non autorisée mauvais token")
+                            _createStateFlow.value = ArticleState.Forbidden
+                            _createSharedFlow.emit(ArticleEvent.ShowSnackBar(R.string.create_forbidden))
+                        }
+                        304 -> {
+                            Log.i("VM LOGIN", "Erreur 304 article non crée")
+                            _createStateFlow.value = ArticleState.NoCreation
+                            _createSharedFlow.emit(ArticleEvent.ShowSnackBar(R.string.create_no_creation))
+                        }
+                        400 -> {
+                            Log.i("VM LOGIN", "Erreur 400 pb de parametre")
+                            _createStateFlow.value = ArticleState.ParamIssue
+                            _createSharedFlow.emit(ArticleEvent.ShowSnackBar(R.string.undefined_error))
+                        }
+                        503 -> {
+                            Log.i("VM LOGIN", "Erreur 503 erreur Mysql")
+                            _createStateFlow.value = ArticleState.Error
+                            _createSharedFlow.emit(ArticleEvent.ShowSnackBar(R.string.undefined_error))
+                        }
                     }
-                } catch(e: Exception) {
+                } catch (e: Exception) {
                     Log.e("CreaArticleViewModel", "API call failed: ${e.localizedMessage}", e)
                 }
-                _articlesState.value = ArticleState.Idle
+            } else {
+                _createStateFlow.value = ArticleState.Uncompleted
+                _createSharedFlow.emit(ArticleEvent.ShowSnackBar(R.string.fill_all_inputs))
             }
-        else
-            _articlesState.value = ArticleState.Uncompleted
+        }
     }
-
-
 
 }
 
+sealed class ArticleEvent {
+    data object NavigateToMainScreen: ArticleEvent()
+    data class ShowSnackBar(val resId: Int): ArticleEvent()
+}

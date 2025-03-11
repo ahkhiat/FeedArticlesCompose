@@ -17,8 +17,11 @@ import com.devid_academy.feedarticlescompose.ui.screen.auth.AuthViewModel
 import com.devid_academy.feedarticlescompose.ui.screen.auth.LoginScreen
 import com.devid_academy.feedarticlescompose.ui.screen.auth.LoginViewModel
 import com.devid_academy.feedarticlescompose.ui.screen.auth.RegisterScreen
+import com.devid_academy.feedarticlescompose.ui.screen.auth.RegisterViewModel
 import com.devid_academy.feedarticlescompose.ui.screen.splash.SplashScreen
 import com.devid_academy.feedarticlescompose.ui.screen.splash.SplashViewModel
+import com.example.feedarticlescompose.ui.screen.create.CreaArticleViewModel
+import com.example.feedarticlescompose.ui.screen.create.CreateScreen
 import com.example.feedarticlescompose.ui.screen.edit.EditScreen
 import com.example.feedarticlescompose.ui.screen.main.MainScreen
 import com.example.feedarticlescompose.ui.screen.main.MainViewModel
@@ -40,7 +43,8 @@ fun MyAppNavigation() {
             LoginScreen(navController, loginViewModel)
         }
         composable(Screen.Register.route) {
-            RegisterScreen(navController)
+            val registerViewModel: RegisterViewModel = hiltViewModel()
+            RegisterScreen(navController, registerViewModel)
         }
         composable(Screen.Main.route) {
             val mainViewModel: MainViewModel = hiltViewModel()
@@ -49,6 +53,10 @@ fun MyAppNavigation() {
         }
         composable(Screen.Edit.route) {
             EditScreen()
+        }
+        composable(Screen.Create.route) {
+            val createViewModel: CreaArticleViewModel = hiltViewModel()
+            CreateScreen(navController, createViewModel)
         }
 //        composable(
 //            Screen.Profile.route,
@@ -75,6 +83,7 @@ sealed class Screen(val route: String) {
     object Login : Screen("login")
     object Register : Screen("register")
     object Edit : Screen("edit")
+    object Create : Screen("create")
 
 }
 

@@ -12,10 +12,15 @@ import com.devid_academy.feedarticlescompose.data.manager.PreferencesManager
 import com.devid_academy.feedarticlescompose.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -31,8 +36,8 @@ class MainViewModel @Inject constructor(
     private val _articles = MutableStateFlow<List<ArticleDTO>>(emptyList())
     val articles: StateFlow<List<ArticleDTO>> = _articles
 
-    private val _filteredArticles = MutableStateFlow<List<ArticleDTO>>(emptyList())
-    val filteredArticles: StateFlow<List<ArticleDTO>> = _filteredArticles
+    private val _selectedCategory = MutableStateFlow(0)
+    val selectedCategory: StateFlow<Int> = _selectedCategory
 
     private val _sessionState = MutableStateFlow<SessionState>(SessionState.Idle)
     val sessionState: StateFlow<SessionState> = _sessionState
@@ -40,12 +45,18 @@ class MainViewModel @Inject constructor(
     private val _currentUserId = MutableStateFlow<Long>(0)
     val currentUserId: StateFlow<Long> = _currentUserId
 
-    private val _directionSharedFlow = MutableSharedFlow<String?>()
-    val directionSharedFlow: SharedFlow<String?> = _directionSharedFlow
+    private val _mainSharedFlow = MutableSharedFlow<String?>()
+    val mainSharedFlow: SharedFlow<String?> = _mainSharedFlow
 
-
-    var hasShownLoginToast = false
-    private var isFiltered = false
+    val filteredArticles: StateFlow<List<ArticleDTO>> = combine(
+        _articles, _selectedCategory
+    ) { articles, selectedCategory ->
+        if (selectedCategory == 0) {
+            articles
+        } else {
+            articles.filter { it.category == selectedCategory }
+        }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     init {
         getArticles()
@@ -67,7 +78,7 @@ class MainViewModel @Inject constructor(
                     401 -> {
                         Log.d("MAIN VM", "Main Vm erreur 401")
                         pm.removeToken()
-                        _directionSharedFlow.emit(Screen.Login.route)
+                        _mainSharedFlow.emit(Screen.Login.route)
                     }
                     400 -> Log.d("MAIN VM", "Main Vm erreur 400 Erreur param")
                     500 -> Log.d("MAIN VM", "Main Vm erreur 500 Erreur Mysql")
@@ -79,16 +90,14 @@ class MainViewModel @Inject constructor(
             _isLoading.value = false
         }
     }
-//    fun getFilteredArticles(categoryId: Int) {
-//        _isLoading.value = true
-//        if(categoryId == 0)
-//            _filteredArticles.value = _articles.value
-//        else
-//            _filteredArticles.value = _articles.value?.filter {
-//                it.category == categoryId
-//            }
-//        _isLoading.value = false
-//    }
+
+    fun setSelectedCategory(category: Int) {
+        viewModelScope.launch {
+            delay(200)
+            _selectedCategory.value = category
+        }
+    }
+
 
 //    fun navigateIfUserIsOwner(article: ArticleDTO): NavDirections {
 //        val userId = _currentUserId.value

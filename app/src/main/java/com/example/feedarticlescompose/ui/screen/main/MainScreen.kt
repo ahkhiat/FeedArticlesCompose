@@ -1,21 +1,15 @@
 package com.example.feedarticlescompose.ui.screen.main
 
-import android.icu.text.SimpleDateFormat
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,26 +21,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.RadioButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PowerSettingsNew
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.SportsSoccer
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -58,25 +47,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.devid_academy.feedarticlescompose.data.dto.ArticleDTO
+import com.devid_academy.feedarticlescompose.ui.navigation.Screen
 import com.devid_academy.feedarticlescompose.ui.screen.auth.AuthViewModel
-import com.devid_academy.feedarticlescompose.ui.screen.splash.SplashViewModel
 import com.devid_academy.feedarticlescompose.utils.getCategoryName
+import com.devid_academy.feedarticlescompose.utils.getRadioButtonColors
 import com.example.feedarticlescompose.R
-import java.security.AccessController.getContext
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -87,13 +72,18 @@ fun MainScreen(
     ) {
 
     val articlesList by mainViewModel.articles.collectAsState()
+    val filteredArticlesList by mainViewModel.filteredArticles.collectAsState()
+
     val direction by authViewModel.directionStateFlow.collectAsState()
     var selectedArticle by remember {
         mutableStateOf<ArticleDTO?>(null)
     }
+    var selectedValueForCategory by remember { mutableStateOf(0) }
+    val context = LocalContext.current
+
 
     LaunchedEffect(true) {
-        mainViewModel.directionSharedFlow.collect { direction ->
+        mainViewModel.mainSharedFlow.collect { direction ->
             direction?.let {
                 navController.navigate(it) {
                     popUpTo("main") {
@@ -111,7 +101,9 @@ fun MainScreen(
                     Text(text = "")
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* Action menu */ }) {
+                    IconButton(onClick = {
+                        navController.navigate(Screen.Create.route)
+                    }) {
                         Icon(
                             Icons.Default.Add,
                             contentDescription = "Menu",
@@ -120,7 +112,14 @@ fun MainScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Action recherche */ }) {
+                    IconButton(onClick = {
+                        authViewModel.logout()
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo("main") {
+                                inclusive = true
+                            }
+                        }
+                    }) {
                         Icon(
                             Icons.Default.PowerSettingsNew,
                             contentDescription = "Recherche",
@@ -133,9 +132,71 @@ fun MainScreen(
         },
         bottomBar = {
             BottomAppBar (
-                modifier = Modifier.height(35.dp)
+                modifier = Modifier.height(50.dp)
             ) {
-
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = selectedValueForCategory == 0,
+                        onClick = {
+                            selectedValueForCategory = 0
+                            mainViewModel.setSelectedCategory(0)
+                        },
+                        colors = getRadioButtonColors()
+                    )
+                    Text(
+                        text = context.getString(R.string.btn_all),
+                        modifier = Modifier.clickable {
+                            selectedValueForCategory = 0
+                        }
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    RadioButton(
+                        selected = selectedValueForCategory == 1,
+                        onClick = {
+                            selectedValueForCategory = 1
+                            mainViewModel.setSelectedCategory(1)
+                        },
+                        colors = getRadioButtonColors()
+                    )
+                    Text(
+                        text = context.getString(R.string.btn_sport),
+                        modifier = Modifier.clickable {
+                            selectedValueForCategory = 1
+                        }
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    RadioButton(
+                        selected = selectedValueForCategory == 2,
+                        onClick = {
+                            selectedValueForCategory = 2
+                            mainViewModel.setSelectedCategory(2)
+                        },
+                        colors = getRadioButtonColors()
+                    )
+                    Text(
+                        text = context.getString(R.string.btn_manga),
+                        modifier = Modifier.clickable {
+                            selectedValueForCategory = 2
+                        }
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    RadioButton(
+                        selected = selectedValueForCategory == 3,
+                        onClick = {
+                            selectedValueForCategory = 3
+                            mainViewModel.setSelectedCategory(3)
+                        },
+                        colors = getRadioButtonColors()
+                    )
+                    Text(
+                        text = context.getString(R.string.btn_misc),
+                        modifier = Modifier.clickable {
+                            selectedValueForCategory = 3
+                        }
+                    )
+                }
             }
         },
         content = { paddingValues ->
@@ -146,7 +207,7 @@ fun MainScreen(
                     .padding(paddingValues)
             ) {
                 MainContent(
-                    articlesList,
+                    filteredArticlesList,
                     onClick = {
 //                        navController.navigate("edit")
                         selectedArticle = if(selectedArticle == it) null else it
@@ -248,9 +309,9 @@ fun ItemView(
                     modifier = Modifier
                         .weight(1f)
                         .padding(
-                                start = 10.dp,
-                                top = if(isSelected) 25.dp else 0.dp
-                                ),
+                            start = 10.dp,
+                            top = if (isSelected) 25.dp else 0.dp
+                        ),
                     horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                     Text(

@@ -7,8 +7,45 @@
     <string name="login_et_password">Password</string>
     <string name="login_btn_login">Sign in</string>
     <string name="login_tv_not_registered">Don\'t have an account ? Sign up !</string>
+    <string name="invalid_credentials">Invalid credentials</string>
+    <string name="login_successful">Login successful</string>
+    <string name="undefined_error">Undefined error</string>
+    <string name="login_successful_with_security_issue">Please log out and log in again</string>
+    <string name="please_log_in_again">Please log in again</string>
+    <string name="you_are_logged">You are actually logged</string>
+    <string name="fill_all_inputs">Please fill all inputs</string>
+
+    <!--  Register  -->
+    <string name="passwords_differents">Passwords don\'t match</string>
+    <string name="register_tv_title">Please register</string>
+    <string name="register_et_name">Login</string>
+    <string name="register_et_password">Password</string>
+    <string name="register_et_password_confirm">Confirmation Password</string>
+    <string name="register_btn_register">Sign up</string>
+    <string name="register_tv_already_registered">Already registered ? </string>
+    <string name="register_tv_signup">Sign up</string>
+
+    <!--  Create  -->
+    <string name="create_tv_title">Create new article</string>
+    <string name="create_et_title_article">Title of article</string>
+    <string name="create_et_url_image">Url of image</string>
+    <string name="create_et_description_article">Description of article</string>
+    <string name="create_btn_validate">Validate</string>
+    <string name="radio1">Sport</string>
+    <string name="radio2">Manga</string>
+    <string name="radio3">Misc</string>
+
+    <string name="create_title">New article</string>
+
+    <string name="create_success">Article created</string>
+    <string name="create_no_creation">Article not created</string>
+    <string name="create_param_issue">Missing parameter</string>
+    <string name="create_forbidden">Unauthorized creation</string>
+
+
     <string name="btn_sport">Sport</string>
     <string name="btn_manga">Manga</string>
     <string name="btn_misc">Misc</string>
     <string name="undefined">Undefined</string>
+    <string name="btn_all">All</string>
 </resources>
