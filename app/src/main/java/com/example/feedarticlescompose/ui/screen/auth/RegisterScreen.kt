@@ -147,7 +147,7 @@ fun RegisterContent(
                 .width(200.dp)
                 .height(50.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceTint,
+                containerColor = FeedArticlesColor,
                 contentColor = Color.White
             )
         ) {
@@ -157,7 +157,7 @@ fun RegisterContent(
 
         Text(
             text = context.getString(R.string.register_tv_already_registered),
-            color = MaterialTheme.colorScheme.surfaceTint,
+            color = FeedArticlesColor,
             modifier = Modifier.clickable {
                 onNavigate()
             }

@@ -44,7 +44,7 @@ fun InputFormTextField(
         placeholder = {
             Text(
                 text = label,
-                color = MaterialTheme.colorScheme.surfaceTint
+                color = FeedArticlesColor
             )
         },
         colors = TextFieldDefaults.colors(

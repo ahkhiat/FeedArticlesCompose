@@ -42,6 +42,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -72,8 +73,11 @@ import com.devid_academy.feedarticlescompose.ui.screen.auth.AuthViewModel
 import com.devid_academy.feedarticlescompose.utils.ArticleEvent
 import com.devid_academy.feedarticlescompose.utils.formatDate
 import com.devid_academy.feedarticlescompose.utils.getCategoryName
-import com.devid_academy.feedarticlescompose.utils.getRadioButtonColors
 import com.example.feedarticlescompose.R
+import com.example.feedarticlescompose.ui.theme.FeedArticlesColor
+import com.example.feedarticlescompose.ui.theme.MangaColor
+import com.example.feedarticlescompose.ui.theme.MiscColor
+import com.example.feedarticlescompose.ui.theme.SportColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -172,7 +176,7 @@ fun MainScreen(
                                 selectedValueForCategory = categoryId
                                 mainViewModel.setSelectedCategory(categoryId)
                             },
-                            colors = getRadioButtonColors()
+                            colors = RadioButtonDefaults.colors(FeedArticlesColor)
                         )
                         Text(
                             text = context.getString(stringRes),
@@ -181,7 +185,7 @@ fun MainScreen(
                                 mainViewModel.setSelectedCategory(categoryId)
                             }
                         )
-                        Spacer(modifier = Modifier.width(16.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
                     }
                 }
             }
@@ -299,10 +303,10 @@ fun ItemView(
     val context = LocalContext.current
 
     val backgroundColor = when (article.category) {
-        1 -> MaterialTheme.colorScheme.onPrimary
-        2 -> MaterialTheme.colorScheme.onSecondary
-        3 -> MaterialTheme.colorScheme.onTertiary
-        else -> MaterialTheme.colorScheme.surface
+        1 -> SportColor
+        2 -> MangaColor
+        3 -> MiscColor
+        else -> Color.White
     }
 
     val imageSize by animateDpAsState(

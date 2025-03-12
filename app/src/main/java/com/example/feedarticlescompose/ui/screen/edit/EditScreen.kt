@@ -39,8 +39,9 @@ import com.devid_academy.feedarticlescompose.data.dto.ArticleDTO
 import com.devid_academy.feedarticlescompose.ui.navigation.Screen
 import com.devid_academy.feedarticlescompose.ui.screen.components.InputFormTextField
 import com.devid_academy.feedarticlescompose.utils.ArticleEvent
-import com.devid_academy.feedarticlescompose.utils.getRadioButtonColors
 import com.example.feedarticlescompose.R
+import com.example.feedarticlescompose.ui.components.CategorySelector
+import com.example.feedarticlescompose.ui.screen.create.CreateContent
 import com.example.feedarticlescompose.ui.theme.FeedArticlesColor
 
 @Composable
@@ -176,49 +177,12 @@ fun EditContent(
             error = painterResource(R.drawable.feedarticles_logo),
         )
         Spacer(modifier = Modifier.height(30.dp))
-        Row {
-            RadioButton(
-                selected = selectedValueForCategory == 1,
-                onClick = {
-                    selectedValueForCategory = 1
-                },
-                colors = getRadioButtonColors()
-            )
-            Text(
-                text = context.getString(R.string.btn_sport),
-                modifier = Modifier.clickable {
-                    selectedValueForCategory = 1
-                }
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            RadioButton(
-                selected = selectedValueForCategory == 2,
-                onClick = {
-                    selectedValueForCategory = 2
-                },
-                colors = getRadioButtonColors()
-            )
-            Text(
-                text= context.getString(R.string.btn_manga),
-                modifier = Modifier.clickable {
-                    selectedValueForCategory = 2
-                }
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            RadioButton(
-                selected = selectedValueForCategory == 3,
-                onClick = {
-                    selectedValueForCategory = 3
-                },
-                colors = getRadioButtonColors()
-            )
-            Text(
-                text= context.getString(R.string.btn_misc),
-                modifier = Modifier.clickable {
-                    selectedValueForCategory = 3
-                }
-            )
-        }
+
+        CategorySelector(
+            selectedValue = selectedValueForCategory,
+            onCategorySelected = { selectedValueForCategory = it },
+            context = LocalContext.current
+        )
 
         Spacer(modifier = Modifier.height(30.dp))
         Button(
@@ -234,7 +198,7 @@ fun EditContent(
                 .width(300.dp)
                 .height(50.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceTint,
+                containerColor = FeedArticlesColor,
                 contentColor = Color.White
             )
         ) {
@@ -245,12 +209,20 @@ fun EditContent(
 
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewEditContent() {
-//    com.example.feedarticlescompose.ui.screen.create.CreateContent(
-//        onCreate = { articleId, articleTitle, articleDesc, articleImageUrl, selectedValueForCategory ->
-//        },
-//        onNavigate = {}
-//    )
-//}
+@Preview(showBackground = true)
+@Composable
+fun PreviewEditContent() {
+    val sampleArticle = ArticleDTO(
+        id = 1,
+        title = "Exemple d'article",
+        description = "Ceci est un exemple de description pour un article.",
+        urlImage = "https://via.placeholder.com/150",
+        category = 1
+    )
+
+    EditContent(
+        article = sampleArticle,
+        onEdit = { _, _, _, _, _ -> },
+        onNavigate = {}
+    )
+}

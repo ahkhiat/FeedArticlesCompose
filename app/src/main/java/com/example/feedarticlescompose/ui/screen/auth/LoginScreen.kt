@@ -123,7 +123,7 @@ fun LoginContent(
                 .width(200.dp)
                 .height(50.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceTint,
+                containerColor = FeedArticlesColor,
                 contentColor = Color.White
             )
         ) {
@@ -133,7 +133,7 @@ fun LoginContent(
 
         Text(
             text = context.getString(R.string.login_tv_not_registered),
-            color = MaterialTheme.colorScheme.surfaceTint,
+            color = FeedArticlesColor,
             modifier = Modifier.clickable {
                 onNavigate()
             }

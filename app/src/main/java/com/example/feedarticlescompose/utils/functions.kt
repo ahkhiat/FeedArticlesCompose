@@ -8,6 +8,7 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.example.feedarticlescompose.R
+import com.example.feedarticlescompose.ui.theme.FeedArticlesColor
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -19,11 +20,6 @@ fun getCategoryName(context: Context, categoryId: Int?): String {
         else -> context.getString(R.string.undefined)
     }
 }
-
-@Composable
-fun getRadioButtonColors() = RadioButtonDefaults.colors(
-        selectedColor = MaterialTheme.colorScheme.surfaceTint
-)
 
 
 fun formatDate(date: String): String {

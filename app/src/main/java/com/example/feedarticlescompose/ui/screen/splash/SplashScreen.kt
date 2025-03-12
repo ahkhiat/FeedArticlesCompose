@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.feedarticlescompose.R
+import com.example.feedarticlescompose.ui.theme.FeedArticlesColor
 
 @Composable
 fun SplashScreen(navController: NavController, splashViewModel: SplashViewModel) {
@@ -58,7 +59,7 @@ fun SplashContent(isLoading: Boolean) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceTint),
+            .background(color = FeedArticlesColor),
 
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -81,6 +82,7 @@ fun SplashContent(isLoading: Boolean) {
         }
         Text(
             text = "Feed Articles",
+            color = Color.White,
             fontSize = 40.sp,
             fontWeight = FontWeight.Bold
 

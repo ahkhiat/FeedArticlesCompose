@@ -18,6 +18,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonColors
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -47,8 +49,8 @@ import com.devid_academy.feedarticlescompose.ui.navigation.Screen
 import com.devid_academy.feedarticlescompose.ui.screen.auth.RegisterViewModel
 import com.devid_academy.feedarticlescompose.ui.screen.components.InputFormTextField
 import com.devid_academy.feedarticlescompose.utils.ArticleEvent
-import com.devid_academy.feedarticlescompose.utils.getRadioButtonColors
 import com.example.feedarticlescompose.R
+import com.example.feedarticlescompose.ui.components.CategorySelector
 import com.example.feedarticlescompose.ui.theme.FeedArticlesColor
 
 @Composable
@@ -184,7 +186,7 @@ fun CreateContent(
                 .width(300.dp)
                 .height(50.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceTint,
+                containerColor = FeedArticlesColor,
                 contentColor = Color.White
             )
         ) {
@@ -196,37 +198,13 @@ fun CreateContent(
 @Composable
 fun PreviewCreateContent() {
     CreateContent(
-        onCreate = { articleTitle, articleDesc, articleImageUrl, selectedValueForCategory ->
+        onCreate = {
+           articleTitle,
+           articleDesc,
+           articleImageUrl,
+           selectedValueForCategory ->
         },
         onNavigate = {}
     )
 }
 
-@Composable
-fun CategorySelector(
-    selectedValue: Int,
-    onCategorySelected: (Int) -> Unit,
-    context: Context
-) {
-    val categories = listOf(
-        1 to context.getString(R.string.btn_sport),
-        2 to context.getString(R.string.btn_manga),
-        3 to context.getString(R.string.btn_misc)
-    )
-    Row {
-        categories.forEach { (value, label) ->
-            RadioButton(
-                selected = selectedValue == value,
-                onClick = { onCategorySelected(value) },
-                colors = getRadioButtonColors()
-            )
-            Text(
-                text = label,
-                modifier = Modifier
-                    .clickable { onCategorySelected(value) }
-                    .padding(start = 4.dp)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-        }
-    }
-}
