@@ -60,6 +60,7 @@ import coil.compose.AsyncImage
 import com.devid_academy.feedarticlescompose.data.dto.ArticleDTO
 import com.devid_academy.feedarticlescompose.ui.navigation.Screen
 import com.devid_academy.feedarticlescompose.ui.screen.auth.AuthViewModel
+import com.devid_academy.feedarticlescompose.utils.formatDate
 import com.devid_academy.feedarticlescompose.utils.getCategoryName
 import com.devid_academy.feedarticlescompose.utils.getRadioButtonColors
 import com.example.feedarticlescompose.R
@@ -87,14 +88,18 @@ fun MainScreen(
     LaunchedEffect(true) {
         mainViewModel.mainSharedFlow.collect { direction ->
             direction?.let {
-                if (it == Screen.Login.route) {
-                    navController.navigate(it) {
-                        popUpTo("main") {
-                            inclusive = true
+                when {
+                    it == Screen.Login.route -> {
+                        navController.navigate(it) {
+                            popUpTo("main") {
+                                inclusive = true
+                            }
                         }
                     }
-                } else {
-                    navController.navigate(it)
+                    it.startsWith("edit/") -> {
+                        navController.navigate(it)
+                    }
+
                 }
             }
         }
@@ -183,7 +188,7 @@ fun MainScreen(
                     onClick = {
                         selectedArticle = if (selectedArticle == it) null else it
                         selectedArticle?.idUser?.let { idUser ->
-                            mainViewModel.navigateIfUserIsOwner(idUser)
+                            mainViewModel.navigateIfUserIsOwner(idUser, selectedArticle!!.id)
                         }
                     },
                     selectedArticle = selectedArticle,
@@ -251,6 +256,8 @@ fun ItemView(
     onClick: (ArticleDTO) -> Unit,
     scale: Float
 ) {
+    val context = LocalContext.current
+
     val backgroundColor = when (article.category) {
         1 -> MaterialTheme.colorScheme.onPrimary
         2 -> MaterialTheme.colorScheme.onSecondary
@@ -266,7 +273,7 @@ fun ItemView(
     Box(
         modifier = Modifier
             .padding(5.dp)
-            .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
+            .border(1.dp, Color.Gray, RoundedCornerShape(5.dp))
     ){
         Card(
             colors = CardDefaults.cardColors(
@@ -331,13 +338,13 @@ fun ItemView(
                         .padding(10.dp)
                 ) {
                     Text(
-                        text = article.createdAt!!,
+                        text = context.getString(R.string.date_item)+ " " + formatDate(article.createdAt!!) ,
                         fontSize = 10.sp,
                         modifier = Modifier
 
                     )
                     Text(
-                        text = "Cat: " + getCategoryName(LocalContext.current, article.category),
+                        text = "Cat. " + getCategoryName(LocalContext.current, article.category),
                         fontSize = 10.sp
                     )
                 }

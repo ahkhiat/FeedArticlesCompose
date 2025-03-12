@@ -42,10 +42,34 @@
     <string name="create_param_issue">Missing parameter</string>
     <string name="create_forbidden">Unauthorized creation</string>
 
+    <!--  Edit  -->
+    <string name="edit_tv_title">Edit article</string>
+    <string name="edit_et_title_article">Title of article</string>
+    <string name="edit_et_url_image">Url of image</string>
+    <string name="edit_et_description_article">Description of article</string>
+    <string name="edit_btn_validate">Modify</string>
+    <string name="toolbar_back_tv">Back</string>
+
+    <string name="btn_delete">Delete</string>
+    <string name="btn_update">Update</string>
+
+    <string name="edit_success">Article updated</string>
+    <string name="edit_unchanged">Article unchanged</string>
+    <string name="edit_param_issue">Missing parameter</string>
+    <string name="edit_forbidden">Update unauthorized</string>
+    <string name="ids_issue">id body and path are differents</string>
+
+    <string name="delete_success">Article deleted</string>
+    <string name="undeleted">Article undeleted</string>
+
 
     <string name="btn_sport">Sport</string>
     <string name="btn_manga">Manga</string>
     <string name="btn_misc">Misc</string>
     <string name="undefined">Undefined</string>
     <string name="btn_all">All</string>
+    <string name="article_not_found">Article not found</string>
+    <string name="server_error">Server error</string>
+    <string name="delete_forbidden">delete forbidden</string>
+    <string name="date_item">Date </string>
 </resources>

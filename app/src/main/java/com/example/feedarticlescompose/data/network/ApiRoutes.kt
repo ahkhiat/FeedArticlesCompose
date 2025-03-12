@@ -7,6 +7,7 @@ object ApiRoutes {
     const val LOGIN_USER = "user/"
     const val REGISTER_USER = "user/"
 
+    const val GET_ARTICLE = "{id}"
     const val UPDATE_ARTICLE = "{id}"
     const val DELETE_ARTICLE = "{id}"
 

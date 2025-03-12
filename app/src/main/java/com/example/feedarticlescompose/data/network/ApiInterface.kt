@@ -31,13 +31,16 @@ interface ApiInterface {
     @GET(".")
     suspend fun getAllArticles(): Response<List<ArticleDTO>?>
 
+    @GET(ApiRoutes.GET_ARTICLE)
+    suspend fun getArticle(@Path("id") articleId: Long): Response<ArticleDTO?>
+
     @PUT(".")
     suspend fun insertArticle(@Body article: CreaArticleDTO): Response<Unit>
 
     @POST(ApiRoutes.UPDATE_ARTICLE)
-    suspend fun updateArticle(@Path("id") articleId: Long, @Body updateArticle: UpdateArticleDTO): Response<StatusDTO?>
+    suspend fun updateArticle(@Path("id") articleId: Long, @Body updateArticle: UpdateArticleDTO): Response<Unit>
 
     @DELETE(ApiRoutes.DELETE_ARTICLE)
-    suspend fun deleteArticle(@Path("id") articleId: Long): Response<StatusDTO?>
+    suspend fun deleteArticle(@Path("id") articleId: Long): Response<Unit>
 
 }

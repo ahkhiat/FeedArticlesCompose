@@ -98,5 +98,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
 
+    implementation ("com.google.accompanist:accompanist-swiperefresh:0.23.0")
 
 }

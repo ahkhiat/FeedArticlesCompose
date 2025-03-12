@@ -22,6 +22,7 @@ import com.devid_academy.feedarticlescompose.ui.screen.splash.SplashScreen
 import com.devid_academy.feedarticlescompose.ui.screen.splash.SplashViewModel
 import com.example.feedarticlescompose.ui.screen.create.CreaArticleViewModel
 import com.example.feedarticlescompose.ui.screen.create.CreateScreen
+import com.example.feedarticlescompose.ui.screen.edit.EditArticleViewModel
 import com.example.feedarticlescompose.ui.screen.edit.EditScreen
 import com.example.feedarticlescompose.ui.screen.main.MainScreen
 import com.example.feedarticlescompose.ui.screen.main.MainViewModel
@@ -55,7 +56,8 @@ fun MyAppNavigation() {
             Screen.Edit.route + "/{articleId}"
         ) { navBackStackEntry ->
             val articleId = navBackStackEntry.arguments?.getString("articleId")
-            EditScreen(navController, articleId)
+            val editViewModel: EditArticleViewModel = hiltViewModel()
+            EditScreen(navController, editViewModel, articleId!!)
         }
         composable(Screen.Create.route) {
             val createViewModel: CreaArticleViewModel = hiltViewModel()
@@ -85,7 +87,7 @@ sealed class Screen(val route: String) {
     object Main : Screen("main")
     object Login : Screen("login")
     object Register : Screen("register")
-    object Edit : Screen("edit")
+    object Edit : Screen("edit/{articleId}")
     object Create : Screen("create")
 
 }

@@ -25,24 +25,7 @@ fun getRadioButtonColors() = RadioButtonDefaults.colors(
         selectedColor = MaterialTheme.colorScheme.surfaceTint
 )
 
-//
-//fun returnCreateCategoryInt(selectedResId: Int): Int {
-//    return when (selectedResId) {
-//        R.id.create_radio_btn1 -> 1
-//        R.id.create_radio_btn2 -> 2
-//        R.id.create_radio_btn3 -> 3
-//        else -> -1
-//    }
-//}
-//
-//fun returnEditCategoryInt(selectedResId: Int): Int {
-//    return when (selectedResId) {
-//        R.id.edit_radio_btn1 -> 1
-//        R.id.edit_radio_btn2 -> 2
-//        R.id.edit_radio_btn3 -> 3
-//        else -> -1
-//    }
-//}
+
 
 
 

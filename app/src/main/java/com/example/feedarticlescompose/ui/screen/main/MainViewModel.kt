@@ -99,10 +99,10 @@ class MainViewModel @Inject constructor(
     }
 
 
-    fun navigateIfUserIsOwner(idUser: Long) {
+    fun navigateIfUserIsOwner(idUser: Long, articleId: Long) {
         if (_currentUserId.value == idUser) {
             viewModelScope.launch {
-                _mainSharedFlow.emit(Screen.Edit.route)
+                _mainSharedFlow.emit(Screen.Edit.route + "/$articleId")
             }
         }
 

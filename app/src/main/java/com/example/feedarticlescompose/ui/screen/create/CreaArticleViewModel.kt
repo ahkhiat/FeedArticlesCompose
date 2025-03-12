@@ -63,6 +63,7 @@ class CreaArticleViewModel @Inject constructor(
                     Log.i("VM CREATE", "Response : $response")
                     if (response.isSuccessful) {
                         _createStateFlow.value = ArticleState.Success
+                        _createSharedFlow.emit(ArticleEvent.ShowSnackBar(R.string.create_success))
                         _createSharedFlow.emit(ArticleEvent.NavigateToMainScreen)
                     } else when (response.code()) {
                         401 -> {

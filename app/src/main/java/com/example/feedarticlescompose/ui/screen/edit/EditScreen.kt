@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.devid_academy.feedarticlescompose.data.dto.ArticleDTO
 import com.devid_academy.feedarticlescompose.ui.navigation.Screen
 import com.devid_academy.feedarticlescompose.ui.screen.components.InputFormTextField
 import com.devid_academy.feedarticlescompose.utils.getRadioButtonColors
@@ -45,20 +46,26 @@ import com.example.feedarticlescompose.ui.theme.FeedArticlesColor
 @Composable
 fun EditScreen(
     navController: NavController,
-    editViewModel: EditArticleViewModel
+    editViewModel: EditArticleViewModel,
+    articleId: String
 ) {
 
     val editState by editViewModel.editStateFlow.collectAsState()
+    val articleStateFlow by editViewModel.articleStateFlow.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
+
+    LaunchedEffect(articleId) {
+        editViewModel.getArticle(articleId.toLong())
+    }
 
     LaunchedEffect(true) {
         editViewModel.editSharedFlow.collect { event ->
             when (event) {
                 is ArticleEvent.NavigateToMainScreen -> {
                     navController.navigate(Screen.Main.route) {
-                        popUpTo("create") {
+                        popUpTo("edit") {
                             inclusive = true
                         }
                     }
@@ -76,22 +83,24 @@ fun EditScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-
-            EditContent(
-                onCreate = {articleTitle, articleDesc, articleImageUrl, selectedValueForCategory ->
-                    editViewModel.updateArticle(
-                        articleTitle,
-                        articleDesc,
-                        articleImageUrl,
-                        selectedValueForCategory.toString()
-                    )
-                    keyboardController?.hide()
-                },
-                onNavigate = {
-                    navController.navigate(Screen.Login.route)
-                }
-            )
-
+//            Text(text = "ID de l'article : ${articleId ?: "Aucun ID reçu"}")
+            articleStateFlow?.let {article ->
+                EditContent(
+                    article = article,onEdit = {articleId, articleTitle, articleDesc, articleImageUrl, selectedValueForCategory ->
+                        editViewModel.updateArticle(
+                            articleId.toString(),
+                            articleTitle,
+                            articleDesc,
+                            articleImageUrl,
+                            selectedValueForCategory.toString()
+                        )
+                        keyboardController?.hide()
+                    },
+                    onNavigate = {
+                        navController.navigate(Screen.Login.route)
+                    }
+                )
+            }
         }
     }
 
@@ -99,7 +108,9 @@ fun EditScreen(
 
 @Composable
 fun EditContent(
-    onCreate: (
+    article: ArticleDTO,
+    onEdit: (
+        articleId: Long,
         articleTitle: String,
         articleDesc: String,
         articleImageUrl: String,
@@ -118,13 +129,14 @@ fun EditContent(
     ) {
         val context = LocalContext.current
 
-        var articleTitle by remember { mutableStateOf("") }
-        var articleDesc by remember { mutableStateOf("") }
-        var articleImageUrl by remember { mutableStateOf("") }
-        var selectedValueForCategory by remember { mutableStateOf(1) }
+        var articleId by remember { mutableStateOf(article.id)  }
+        var articleTitle by remember { mutableStateOf(article.title) }
+        var articleDesc by remember { mutableStateOf(article.description) }
+        var articleImageUrl by remember { mutableStateOf(article.urlImage) }
+        var selectedValueForCategory by remember { mutableStateOf(article.category) }
 
         Text(
-            text = context.getString(R.string.create_title),
+            text = context.getString(R.string.edit_tv_title),
             style = MaterialTheme.typography.headlineMedium.copy(color = FeedArticlesColor),
             fontWeight = FontWeight.Bold
         )
@@ -133,7 +145,7 @@ fun EditContent(
         InputFormTextField(
             value = articleTitle,
             onValueChange = { articleTitle = it },
-            label = context.getString(R.string.create_tv_title)
+            label = context.getString(R.string.edit_et_title_article)
 
         )
         Spacer(modifier = Modifier.height(15.dp))
@@ -142,7 +154,7 @@ fun EditContent(
             value = articleDesc,
             onValueChange = { articleDesc = it },
             maxLines = 10,
-            label = context.getString(R.string.create_et_description_article),
+            label = context.getString(R.string.edit_et_description_article),
             modifier = Modifier
                 .height(200.dp),
             singleLine = false
@@ -151,7 +163,7 @@ fun EditContent(
         InputFormTextField(
             value = articleImageUrl,
             onValueChange = { articleImageUrl = it },
-            label = context.getString(R.string.create_et_url_image),
+            label = context.getString(R.string.edit_et_url_image),
         )
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -212,7 +224,8 @@ fun EditContent(
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = {
-                onCreate(
+                onEdit(
+                    articleId,
                     articleTitle,
                     articleDesc,
                     articleImageUrl,
@@ -233,12 +246,12 @@ fun EditContent(
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewEditContent() {
-    com.example.feedarticlescompose.ui.screen.create.CreateContent(
-        onCreate = { articleTitle, articleDesc, articleImageUrl, selectedValueForCategory ->
-        },
-        onNavigate = {}
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewEditContent() {
+//    com.example.feedarticlescompose.ui.screen.create.CreateContent(
+//        onCreate = { articleId, articleTitle, articleDesc, articleImageUrl, selectedValueForCategory ->
+//        },
+//        onNavigate = {}
+//    )
+//}
