@@ -180,12 +180,15 @@ fun MainScreen(
                         )
                         Text(
                             text = context.getString(stringRes),
-                            modifier = Modifier.clickable {
+                            modifier = Modifier
+                                .clickable {
                                 selectedValueForCategory = categoryId
                                 mainViewModel.setSelectedCategory(categoryId)
-                            }
+                            },
+                            fontSize = 12.sp
+
                         )
-                        Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(5.dp))
                     }
                 }
             }
