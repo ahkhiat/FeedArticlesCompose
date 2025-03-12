@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.devid_academy.feedarticlescompose.data.api.ApiService
 import com.devid_academy.feedarticlescompose.data.manager.PreferencesManager
 import com.devid_academy.feedarticlescompose.utils.AuthEvent
-import com.devid_academy.feedarticlescompose.utils.LoginState
 import com.example.feedarticlescompose.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

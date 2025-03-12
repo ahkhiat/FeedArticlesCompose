@@ -155,7 +155,7 @@ fun EditContent(
             maxLines = 10,
             label = context.getString(R.string.edit_et_description_article),
             modifier = Modifier
-                .height(200.dp),
+                .height(150.dp),
             singleLine = false
         )
         Spacer(modifier = Modifier.height(15.dp))

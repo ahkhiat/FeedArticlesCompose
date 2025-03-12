@@ -7,7 +7,6 @@ import com.devid_academy.feedarticlescompose.data.api.ApiService
 import com.devid_academy.feedarticlescompose.data.dto.CreaArticleDTO
 import com.devid_academy.feedarticlescompose.data.manager.PreferencesManager
 import com.devid_academy.feedarticlescompose.utils.ArticleEvent
-import com.devid_academy.feedarticlescompose.utils.ArticleState
 import com.example.feedarticlescompose.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
