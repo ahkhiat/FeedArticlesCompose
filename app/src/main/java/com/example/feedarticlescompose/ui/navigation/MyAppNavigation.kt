@@ -63,20 +63,6 @@ fun MyAppNavigation() {
             val createViewModel: CreaArticleViewModel = hiltViewModel()
             CreateScreen(navController, createViewModel)
         }
-//        composable(
-//            Screen.Profile.route,
-//            enterTransition = {
-//                slideInVertically { -it } },
-//            exitTransition = { slideOutVertically { -it } }
-//            ) {
-//                val authViewModel: AuthViewModel = hiltViewModel()
-//                val profileViewModel: ProfileViewModel = hiltViewModel()
-//                ProfileScreen(navController, authViewModel, profileViewModel)
-//        }
-//        composable(Screen.CreateEvent.route) {
-//            val createEventViewModel: CreateEventViewModel = hiltViewModel()
-//            CreateEventScreen(navController, createEventViewModel)
-//        }
     }
 }
 
@@ -89,7 +75,6 @@ sealed class Screen(val route: String) {
     object Register : Screen("register")
     object Edit : Screen("edit/{articleId}")
     object Create : Screen("create")
-
 }
 
 

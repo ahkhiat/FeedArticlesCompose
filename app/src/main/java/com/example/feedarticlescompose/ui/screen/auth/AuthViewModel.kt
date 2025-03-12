@@ -21,6 +21,4 @@ class AuthViewModel @Inject constructor(
         authManager.logout()
         _directionStateFlow.value = Screen.Login.route
     }
-
-
 }

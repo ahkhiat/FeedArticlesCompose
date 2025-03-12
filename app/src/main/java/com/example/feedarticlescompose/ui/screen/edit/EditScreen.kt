@@ -38,9 +38,9 @@ import coil.compose.AsyncImage
 import com.devid_academy.feedarticlescompose.data.dto.ArticleDTO
 import com.devid_academy.feedarticlescompose.ui.navigation.Screen
 import com.devid_academy.feedarticlescompose.ui.screen.components.InputFormTextField
+import com.devid_academy.feedarticlescompose.utils.ArticleEvent
 import com.devid_academy.feedarticlescompose.utils.getRadioButtonColors
 import com.example.feedarticlescompose.R
-import com.example.feedarticlescompose.ui.screen.create.ArticleEvent
 import com.example.feedarticlescompose.ui.theme.FeedArticlesColor
 
 @Composable
@@ -50,7 +50,6 @@ fun EditScreen(
     articleId: String
 ) {
 
-    val editState by editViewModel.editStateFlow.collectAsState()
     val articleStateFlow by editViewModel.articleStateFlow.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current

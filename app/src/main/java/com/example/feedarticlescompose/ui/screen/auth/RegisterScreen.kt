@@ -43,12 +43,12 @@ import androidx.navigation.NavController
 import com.example.feedarticlescompose.R
 import com.devid_academy.feedarticlescompose.ui.navigation.Screen
 import com.devid_academy.feedarticlescompose.ui.screen.components.InputFormTextField
+import com.devid_academy.feedarticlescompose.utils.AuthEvent
 import com.example.feedarticlescompose.ui.theme.FeedArticlesColor
 
 @Composable
 fun RegisterScreen(navController: NavController, registerViewModel: RegisterViewModel) {
 
-    val registerState by registerViewModel.registerStateFlow.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
@@ -86,10 +86,8 @@ fun RegisterScreen(navController: NavController, registerViewModel: RegisterView
                     navController.navigate(Screen.Login.route)
                 }
             )
-
         }
     }
-
 }
 
 @Composable
@@ -119,9 +117,6 @@ fun RegisterContent(
             style = MaterialTheme.typography.headlineMedium.copy(color = FeedArticlesColor),
             fontWeight = FontWeight.Bold
         )
-
-
-
         Spacer(modifier = Modifier.height(100.dp))
         InputFormTextField(
             value = loginForm,

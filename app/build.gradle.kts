@@ -100,4 +100,8 @@ dependencies {
 
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.23.0")
 
+    implementation("androidx.compose.material:material:1.5.0")
+    implementation("androidx.compose.material3:material3:1.2.0")
+
+
 }

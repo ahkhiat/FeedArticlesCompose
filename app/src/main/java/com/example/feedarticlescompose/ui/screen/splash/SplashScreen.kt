@@ -73,7 +73,7 @@ fun SplashContent(isLoading: Boolean) {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.feedarticles_logo),
-                contentDescription = "ballon",
+                contentDescription = "Feed Articles",
                 modifier = Modifier
                     .size(200.dp)
                     .padding(10.dp)

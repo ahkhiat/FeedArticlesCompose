@@ -17,8 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val preferencesManager: PreferencesManager,
-    private val authManager: AuthManager,
+    private val preferencesManager: PreferencesManager
 ): ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading

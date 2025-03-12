@@ -1,8 +1,10 @@
 package com.example.feedarticlescompose.ui.screen.main
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,10 +23,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.DismissState
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PowerSettingsNew
+import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -60,6 +69,7 @@ import coil.compose.AsyncImage
 import com.devid_academy.feedarticlescompose.data.dto.ArticleDTO
 import com.devid_academy.feedarticlescompose.ui.navigation.Screen
 import com.devid_academy.feedarticlescompose.ui.screen.auth.AuthViewModel
+import com.devid_academy.feedarticlescompose.utils.ArticleEvent
 import com.devid_academy.feedarticlescompose.utils.formatDate
 import com.devid_academy.feedarticlescompose.utils.getCategoryName
 import com.devid_academy.feedarticlescompose.utils.getRadioButtonColors
@@ -79,9 +89,10 @@ fun MainScreen(
     val direction by authViewModel.directionStateFlow.collectAsState()
     val isLoading by mainViewModel.isLoading.collectAsState()
 
+    val currentUserId by mainViewModel.currentUserId.collectAsState()
+
     var selectedArticle by remember { mutableStateOf<ArticleDTO?>(null) }
     var selectedValueForCategory by remember { mutableStateOf(0) }
-
 
     val context = LocalContext.current
 
@@ -99,7 +110,6 @@ fun MainScreen(
                     it.startsWith("edit/") -> {
                         navController.navigate(it)
                     }
-
                 }
             }
         }
@@ -185,6 +195,7 @@ fun MainScreen(
             ) {
                 MainContent(
                     filteredArticlesList,
+                    currentUserId,
                     onClick = {
                         selectedArticle = if (selectedArticle == it) null else it
                         selectedArticle?.idUser?.let { idUser ->
@@ -195,6 +206,9 @@ fun MainScreen(
                     isRefreshing = isLoading,
                     onRefresh = {
                         mainViewModel.getArticles()
+                    },
+                    onDismiss = {
+                        mainViewModel.deleteArticle(it)
                     }
                 )
             }
@@ -203,15 +217,18 @@ fun MainScreen(
 }
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @ExperimentalMaterial3Api
 fun MainContent(
     articlesList: List<ArticleDTO>,
+    currentUserId: Long,
     onClick: (ArticleDTO) -> Unit,
     selectedArticle: ArticleDTO?,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onDismiss: (Long) -> Unit
 ) {
 
     PullToRefreshBox(
@@ -233,19 +250,42 @@ fun MainContent(
                 ) {article ->
                     val isSelected = article == selectedArticle
                     val scale by animateFloatAsState(if(isSelected) 1.5f else 1f, label = "")
-                    ItemView(
-                        article = article,
-                        isSelected = isSelected,
-                        onClick = { onClick(article) },
-                        scale = scale
-                    )
+
+                    val dismissState = rememberDismissState()
+
+                    LaunchedEffect(dismissState.currentValue) {
+                        if (dismissState.currentValue == DismissValue.DismissedToEnd ||
+                            dismissState.currentValue == DismissValue.DismissedToStart)
+                        {
+                            onDismiss(article.id)
+                        }
+                    }
+                    if(currentUserId == article.idUser) {
+                        SwipeToDismiss(
+                            state = dismissState,
+                            directions = setOf(DismissDirection.EndToStart),
+                            background = { DismissBackground(dismissState) },
+                            dismissContent = {
+                                ItemView(
+                                    article = article,
+                                    isSelected = isSelected,
+                                    onClick = { onClick(article) },
+                                    scale = scale
+                                )
+                            }
+                        )
+                    } else {
+                        ItemView(
+                            article = article,
+                            isSelected = isSelected,
+                            onClick = { onClick(article) },
+                            scale = scale
+                        )
+                    }
                 }
             }
         }
-
     }
-
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -254,7 +294,7 @@ fun ItemView(
     article: ArticleDTO,
     isSelected: Boolean,
     onClick: (ArticleDTO) -> Unit,
-    scale: Float
+    scale: Float,
 ) {
     val context = LocalContext.current
 
@@ -357,6 +397,29 @@ fun ItemView(
                 )
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun DismissBackground(dismissState: DismissState) {
+    val color by animateColorAsState(
+        targetValue = if (dismissState.targetValue == DismissValue.Default) Color.Transparent else Color.Red,
+        label = "dismissBackground"
+    )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp)
+            .background(color)
+        ,
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = "Supprimer",
+            tint = Color.White
+        )
     }
 }
 

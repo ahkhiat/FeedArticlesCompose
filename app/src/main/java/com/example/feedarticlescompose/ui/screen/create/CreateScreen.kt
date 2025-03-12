@@ -1,5 +1,6 @@
 package com.example.feedarticlescompose.ui.screen.create
 
+import android.content.Context
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -43,9 +44,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.devid_academy.feedarticlescompose.ui.navigation.Screen
-import com.devid_academy.feedarticlescompose.ui.screen.auth.AuthEvent
 import com.devid_academy.feedarticlescompose.ui.screen.auth.RegisterViewModel
 import com.devid_academy.feedarticlescompose.ui.screen.components.InputFormTextField
+import com.devid_academy.feedarticlescompose.utils.ArticleEvent
 import com.devid_academy.feedarticlescompose.utils.getRadioButtonColors
 import com.example.feedarticlescompose.R
 import com.example.feedarticlescompose.ui.theme.FeedArticlesColor
@@ -53,7 +54,6 @@ import com.example.feedarticlescompose.ui.theme.FeedArticlesColor
 @Composable
 fun CreateScreen(navController: NavController, createViewModel: CreaArticleViewModel) {
 
-    val createState by createViewModel.createStateFlow.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
@@ -96,10 +96,8 @@ fun CreateScreen(navController: NavController, createViewModel: CreaArticleViewM
                     navController.navigate(Screen.Login.route)
                 }
             )
-
         }
     }
-
 }
 
 @Composable
@@ -133,7 +131,6 @@ fun CreateContent(
             style = MaterialTheme.typography.headlineMedium.copy(color = FeedArticlesColor),
             fontWeight = FontWeight.Bold
         )
-
         Spacer(modifier = Modifier.height(100.dp))
         InputFormTextField(
             value = articleTitle,
@@ -142,7 +139,6 @@ fun CreateContent(
 
         )
         Spacer(modifier = Modifier.height(15.dp))
-
         InputFormTextField(
             value = articleDesc,
             onValueChange = { articleDesc = it },
@@ -158,7 +154,6 @@ fun CreateContent(
             onValueChange = { articleImageUrl = it },
             label = context.getString(R.string.create_et_url_image),
         )
-
         Spacer(modifier = Modifier.height(30.dp))
         AsyncImage(
             model = articleImageUrl,
@@ -170,50 +165,12 @@ fun CreateContent(
             error = painterResource(R.drawable.feedarticles_logo),
         )
         Spacer(modifier = Modifier.height(30.dp))
-        Row {
-            RadioButton(
-                selected = selectedValueForCategory == 1,
-                onClick = {
-                    selectedValueForCategory = 1
-                },
-                colors = getRadioButtonColors()
-            )
-            Text(
-                text = context.getString(R.string.btn_sport),
-                modifier = Modifier.clickable {
-                    selectedValueForCategory = 1
-                }
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            RadioButton(
-                selected = selectedValueForCategory == 2,
-                onClick = {
-                    selectedValueForCategory = 2
-                },
-                colors = getRadioButtonColors()
-            )
-            Text(
-                text= context.getString(R.string.btn_manga),
-                modifier = Modifier.clickable {
-                    selectedValueForCategory = 2
-                }
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            RadioButton(
-                selected = selectedValueForCategory == 3,
-                onClick = {
-                    selectedValueForCategory = 3
-                },
-                colors = getRadioButtonColors()
-            )
-            Text(
-                text= context.getString(R.string.btn_misc),
-                modifier = Modifier.clickable {
-                    selectedValueForCategory = 3
-                }
-            )
-        }
 
+        CategorySelector(
+            selectedValue = selectedValueForCategory,
+            onCategorySelected = { selectedValueForCategory = it },
+            context = LocalContext.current
+        )
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = {
@@ -235,7 +192,6 @@ fun CreateContent(
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewCreateContent() {
@@ -244,4 +200,33 @@ fun PreviewCreateContent() {
         },
         onNavigate = {}
     )
+}
+
+@Composable
+fun CategorySelector(
+    selectedValue: Int,
+    onCategorySelected: (Int) -> Unit,
+    context: Context
+) {
+    val categories = listOf(
+        1 to context.getString(R.string.btn_sport),
+        2 to context.getString(R.string.btn_manga),
+        3 to context.getString(R.string.btn_misc)
+    )
+    Row {
+        categories.forEach { (value, label) ->
+            RadioButton(
+                selected = selectedValue == value,
+                onClick = { onCategorySelected(value) },
+                colors = getRadioButtonColors()
+            )
+            Text(
+                text = label,
+                modifier = Modifier
+                    .clickable { onCategorySelected(value) }
+                    .padding(start = 4.dp)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+        }
+    }
 }

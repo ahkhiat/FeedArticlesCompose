@@ -2,7 +2,6 @@ package com.devid_academy.feedarticlescompose.data.api
 
 import com.devid_academy.feedarticlescompose.data.dto.ArticleDTO
 import com.devid_academy.feedarticlescompose.data.dto.CreaArticleDTO
-import com.devid_academy.feedarticlescompose.data.dto.StatusDTO
 import com.devid_academy.feedarticlescompose.data.dto.UpdateArticleDTO
 import com.devid_academy.feedarticlescompose.data.dto.auth.AuthDTO
 import com.devid_academy.feedarticlescompose.data.dto.auth.StatusAuthDTO

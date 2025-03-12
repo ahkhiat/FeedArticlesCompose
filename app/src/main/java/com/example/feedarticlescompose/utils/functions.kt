@@ -26,9 +26,6 @@ fun getRadioButtonColors() = RadioButtonDefaults.colors(
 )
 
 
-
-
-
 fun formatDate(date: String): String {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -37,7 +34,12 @@ fun formatDate(date: String): String {
     return outputFormat.format(dateToTransform!!)
 }
 
-fun makeToast(context: Context ,message: String) {
-    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+sealed class ArticleEvent {
+    data object NavigateToMainScreen: ArticleEvent()
+    data class ShowSnackBar(val resId: Int): ArticleEvent()
 }
 
+sealed class AuthEvent {
+    data object NavigateToMainScreen: AuthEvent()
+    data class ShowSnackBar(val resId: Int): AuthEvent()
+}
