@@ -21,7 +21,6 @@
     <string name="register_et_name">Login</string>
     <string name="register_et_password">Password</string>
     <string name="register_et_password_confirm">Confirmation Password</string>
-    <string name="register_btn_register">Sign up</string>
     <string name="register_tv_already_registered">Already registered ? </string>
     <string name="register_tv_signup">Sign up</string>
 
@@ -48,10 +47,6 @@
     <string name="edit_et_url_image">Url of image</string>
     <string name="edit_et_description_article">Description of article</string>
     <string name="edit_btn_validate">Modify</string>
-    <string name="toolbar_back_tv">Back</string>
-
-    <string name="btn_delete">Delete</string>
-    <string name="btn_update">Update</string>
 
     <string name="edit_success">Article updated</string>
     <string name="edit_unchanged">Article unchanged</string>

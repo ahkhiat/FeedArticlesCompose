@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.feedarticlescompose.R
 import com.devid_academy.feedarticlescompose.ui.navigation.Screen
@@ -48,7 +49,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
             when (event) {
                 is AuthEvent.NavigateToMainScreen -> {
                     navController.navigate(Screen.Main.route) {
-                        popUpTo("login") {
+                        popUpTo(Screen.Login.route) {
                             inclusive = true
                         }
                     }
@@ -120,19 +121,24 @@ fun LoginContent(
                 onLogin(loginForm, mdpForm)
             },
             modifier = Modifier
-                .width(200.dp)
+                .width(160.dp)
                 .height(50.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = FeedArticlesColor,
                 contentColor = Color.White
             )
         ) {
-            Text(context.getString(R.string.login_btn_login))
+            Text(
+                text = context.getString(R.string.login_btn_login),
+                fontSize = 18.sp
+            )
         }
         Spacer(modifier = Modifier.height(30.dp))
 
         Text(
             text = context.getString(R.string.login_tv_not_registered),
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
             color = FeedArticlesColor,
             modifier = Modifier.clickable {
                 onNavigate()

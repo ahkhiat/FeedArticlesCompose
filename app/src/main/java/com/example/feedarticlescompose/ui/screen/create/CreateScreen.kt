@@ -43,6 +43,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.devid_academy.feedarticlescompose.ui.navigation.Screen
@@ -65,7 +66,7 @@ fun CreateScreen(navController: NavController, createViewModel: CreaArticleViewM
             when (event) {
                 is ArticleEvent.NavigateToMainScreen -> {
                     navController.navigate(Screen.Main.route) {
-                        popUpTo("create") {
+                        popUpTo(Screen.Create.route) {
                             inclusive = true
                         }
                     }
@@ -190,7 +191,10 @@ fun CreateContent(
                 contentColor = Color.White
             )
         ) {
-            Text(context.getString(R.string.create_btn_validate))
+            Text(
+                text = context.getString(R.string.create_btn_validate),
+                fontSize = 18.sp
+                )
         }
     }
 }

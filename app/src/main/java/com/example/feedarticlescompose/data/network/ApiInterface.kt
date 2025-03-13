@@ -27,13 +27,13 @@ interface ApiInterface {
     @PUT(ApiRoutes.REGISTER_USER)
     suspend fun registerUser(@Body user: AuthDTO): Response<StatusAuthDTO>
 
-    @GET(".")
+    @GET(ApiRoutes.GET_ARTICLES)
     suspend fun getAllArticles(): Response<List<ArticleDTO>>
 
     @GET(ApiRoutes.GET_ARTICLE)
     suspend fun getArticle(@Path("id") articleId: Long): Response<ArticleDTO>
 
-    @PUT(".")
+    @PUT(ApiRoutes.INSERT_ARTICLE)
     suspend fun insertArticle(@Body article: CreaArticleDTO): Response<Unit>
 
     @POST(ApiRoutes.UPDATE_ARTICLE)

@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.devid_academy.feedarticlescompose.data.dto.ArticleDTO
@@ -65,7 +66,7 @@ fun EditScreen(
             when (event) {
                 is ArticleEvent.NavigateToMainScreen -> {
                     navController.navigate(Screen.Main.route) {
-                        popUpTo("edit") {
+                        popUpTo(Screen.Edit.route + "/{articleId}") {
                             inclusive = true
                         }
                     }
@@ -202,7 +203,10 @@ fun EditContent(
                 contentColor = Color.White
             )
         ) {
-            Text(context.getString(R.string.create_btn_validate))
+            Text(
+                text = context.getString(R.string.edit_btn_validate),
+                fontSize = 18.sp
+            )
         }
     }
 
@@ -217,7 +221,9 @@ fun PreviewEditContent() {
         title = "Exemple d'article",
         description = "Ceci est un exemple de description pour un article.",
         urlImage = "https://via.placeholder.com/150",
-        category = 1
+        category = 1,
+        createdAt = "2025/03/10",
+        idUser = 590
     )
 
     EditContent(

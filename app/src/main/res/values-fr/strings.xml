@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">FeedArticlesCompose</string>
+
+    <!--  Login   -->
+    <string name="login_tv_title">Connectez-vous</string>
+    <string name="login_et_name">Login</string>
+    <string name="login_et_password">Password</string>
+    <string name="login_btn_login">Se connecter</string>
+    <string name="login_tv_not_registered">Pas de compte ? Inscrivez-vous !</string>
+    <string name="invalid_credentials">Nom ou mot de passe invalide</string>
+    <string name="login_successful">Connexion réussie</string>
+    <string name="undefined_error">Erreur inconnue</string>
+    <string name="login_successful_with_security_issue">Veuillez vous reconnecter</string>
+    <string name="please_log_in_again">Veuillez vous reconnecter</string>
+    <string name="you_are_logged">Vous êtes déjà connecté</string>
+    <string name="fill_all_inputs">Veuillez remplir tous les champs</string>
+
+    <!--  Register  -->
+    <string name="passwords_differents">Les mots de passe sont différents</string>
+    <string name="register_tv_title">Nouveau Compte</string>
+    <string name="register_et_name">Login</string>
+    <string name="register_et_password">Password</string>
+    <string name="register_et_password_confirm">Confirmation Password</string>
+    <string name="register_tv_already_registered">Déjà inscrit ? </string>
+    <string name="register_tv_signup">S\'inscrire</string>
+
+    <!--  Create  -->
+    <string name="create_tv_title">Nouvel Article</string>
+    <string name="create_et_title_article">Titre</string>
+    <string name="create_et_url_image">Image URL</string>
+    <string name="create_et_description_article">Contenu</string>
+    <string name="create_btn_validate">Enregistrer</string>
+    <string name="radio1">Sport</string>
+    <string name="radio2">Manga</string>
+    <string name="radio3">Divers</string>
+
+    <string name="create_title">New article</string>
+
+    <string name="create_success">Article crée</string>
+    <string name="create_no_creation">Article non crée</string>
+    <string name="create_param_issue">Paramètres manquants</string>
+    <string name="create_forbidden">Création non autorisée</string>
+
+    <!--  Edit  -->
+    <string name="edit_tv_title">Edition Article</string>
+    <string name="edit_et_title_article">Titre</string>
+    <string name="edit_et_url_image">Image URL</string>
+    <string name="edit_et_description_article">Contenu</string>
+    <string name="edit_btn_validate">Mettre à jour</string>
+    <string name="date_item">Du </string>
+
+    <string name="edit_success">Article updated</string>
+    <string name="edit_unchanged">Article unchanged</string>
+    <string name="edit_param_issue">Missing parameter</string>
+    <string name="edit_forbidden">Update unauthorized</string>
+    <string name="ids_issue">id body and path are differents</string>
+
+    <string name="delete_success">Article suprrimé</string>
+    <string name="undeleted">Article non supprimé</string>
+
+
+    <string name="btn_sport">Sport</string>
+    <string name="btn_manga">Manga</string>
+    <string name="btn_misc">Divers</string>
+    <string name="undefined">Undefined</string>
+    <string name="btn_all">Tout</string>
+    <string name="article_not_found">Article non trouvé</string>
+    <string name="server_error">Erreur serveur</string>
+    <string name="delete_forbidden">Supression non autorisée</string>
+</resources>

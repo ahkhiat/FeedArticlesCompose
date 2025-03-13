@@ -40,7 +40,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
@@ -72,7 +71,6 @@ import coil.compose.AsyncImage
 import com.devid_academy.feedarticlescompose.data.dto.ArticleDTO
 import com.devid_academy.feedarticlescompose.ui.navigation.Screen
 import com.devid_academy.feedarticlescompose.ui.screen.auth.AuthViewModel
-import com.devid_academy.feedarticlescompose.utils.ArticleEvent
 import com.devid_academy.feedarticlescompose.utils.formatDate
 import com.devid_academy.feedarticlescompose.utils.getCategoryName
 import com.example.feedarticlescompose.R
@@ -89,13 +87,13 @@ fun MainScreen(
     authViewModel: AuthViewModel
     ) {
 
-    val articlesList by mainViewModel.articles.collectAsState()
-    val filteredArticlesList by mainViewModel.filteredArticles.collectAsState()
+    val articlesList by mainViewModel.articlesListStateFlow.collectAsState()
+    val filteredArticlesList by mainViewModel.filteredArticlesStateFlow.collectAsState()
 
     val direction by authViewModel.directionStateFlow.collectAsState()
-    val isLoading by mainViewModel.isLoading.collectAsState()
+    val isLoading by mainViewModel.isLoadingStateFlow.collectAsState()
 
-    val currentUserId by mainViewModel.currentUserId.collectAsState()
+    val currentUserId by mainViewModel.currentUserIdStateFlow.collectAsState()
 
     var selectedArticle by remember { mutableStateOf<ArticleDTO?>(null) }
     var selectedValueForCategory by rememberSaveable { mutableIntStateOf(0) }
@@ -108,7 +106,7 @@ fun MainScreen(
                 when {
                     it == Screen.Login.route -> {
                         navController.navigate(it) {
-                            popUpTo("main") {
+                            popUpTo(Screen.Main.route) {
                                 inclusive = true
                             }
                         }
@@ -187,8 +185,7 @@ fun MainScreen(
                                 selectedValueForCategory = categoryId
                                 mainViewModel.setSelectedCategory(categoryId)
                             },
-                            fontSize = 12.sp
-
+                            fontSize = 14.sp
                         )
                         Spacer(modifier = Modifier.width(5.dp))
                     }

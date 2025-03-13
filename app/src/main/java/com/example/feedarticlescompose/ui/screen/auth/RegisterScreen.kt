@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -58,7 +59,7 @@ fun RegisterScreen(navController: NavController, registerViewModel: RegisterView
             when (event) {
                 is AuthEvent.NavigateToMainScreen -> {
                     navController.navigate(Screen.Main.route) {
-                        popUpTo("register") {
+                        popUpTo(Screen.Register.route) {
                             inclusive = true
                         }
                     }
@@ -144,23 +145,26 @@ fun RegisterContent(
                 onRegister(loginForm, mdpForm, mdpConfirmForm)
             },
             modifier = Modifier
-                .width(200.dp)
+                .width(160.dp)
                 .height(50.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = FeedArticlesColor,
                 contentColor = Color.White
             )
         ) {
-            Text(context.getString(R.string.register_tv_signup))
+            Text(
+                text = context.getString(R.string.register_tv_signup),
+                fontSize = 18.sp
+            )
         }
-        Spacer(modifier = Modifier.height(30.dp))
-
-        Text(
-            text = context.getString(R.string.register_tv_already_registered),
-            color = FeedArticlesColor,
-            modifier = Modifier.clickable {
-                onNavigate()
-            }
-        )
+//        Spacer(modifier = Modifier.height(30.dp))
+//
+//        Text(
+//            text = context.getString(R.string.register_tv_already_registered),
+//            color = FeedArticlesColor,
+//            modifier = Modifier.clickable {
+//                onNavigate()
+//            }
+//        )
     }
 }

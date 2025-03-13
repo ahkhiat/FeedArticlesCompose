@@ -25,10 +25,10 @@ data class ArticleDTO (
     val category: Int,
 
     @Json(name = "created_at")
-    val createdAt: String? = null,
+    val createdAt: String,
 
     @Json(name = "id_u")
-    val idUser: Long? = null,
+    val idUser: Long,
 
 ): Parcelable
 
