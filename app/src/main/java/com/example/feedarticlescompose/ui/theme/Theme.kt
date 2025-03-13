@@ -20,27 +20,12 @@ private val DarkColorScheme = darkColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Pink40,
-    surfaceTint = FeedArticlesColor,
-    onPrimary = MangaColor,
-    onSecondary = SportColor,
-    onTertiary = MiscColor
-//    onPrimary = Color.White,
-//    onSecondary = Color.Black,
-//    onTertiary = Color.White
-
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Pink40,
-    surfaceTint = FeedArticlesColor,
-//    onPrimary = Color.White,
-//    onSecondary = Color.Black,
-//    onTertiary = Color.White
-    onPrimary = MangaColor,
-    onSecondary = SportColor,
-    onTertiary = MiscColor
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),

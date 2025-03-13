@@ -28,10 +28,10 @@ interface ApiInterface {
     suspend fun registerUser(@Body user: AuthDTO): Response<StatusAuthDTO>
 
     @GET(".")
-    suspend fun getAllArticles(): Response<List<ArticleDTO>?>
+    suspend fun getAllArticles(): Response<List<ArticleDTO>>
 
     @GET(ApiRoutes.GET_ARTICLE)
-    suspend fun getArticle(@Path("id") articleId: Long): Response<ArticleDTO?>
+    suspend fun getArticle(@Path("id") articleId: Long): Response<ArticleDTO>
 
     @PUT(".")
     suspend fun insertArticle(@Body article: CreaArticleDTO): Response<Unit>

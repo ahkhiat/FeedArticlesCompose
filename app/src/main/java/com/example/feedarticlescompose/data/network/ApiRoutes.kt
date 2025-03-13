@@ -11,5 +11,4 @@ object ApiRoutes {
     const val UPDATE_ARTICLE = "{id}"
     const val DELETE_ARTICLE = "{id}"
 
-    const val TOGGLE_FAV = "{id}"
 }
