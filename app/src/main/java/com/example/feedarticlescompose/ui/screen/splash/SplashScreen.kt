@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -61,7 +62,10 @@ fun SplashContent(isLoading: Boolean) {
     ) {
         AnimatedVisibility(
             visible = isLoading,
-            enter = fadeIn(animationSpec = tween(1000)),
+            enter = slideInVertically(
+                initialOffsetY = { - 1000 },
+                animationSpec = tween(1000)
+            ) + fadeIn(animationSpec = tween(1000)),
             exit = fadeOut(animationSpec = tween(700)) + slideOutVertically(
                 animationSpec = tween(700),
                 targetOffsetY = { -400 }
@@ -75,13 +79,25 @@ fun SplashContent(isLoading: Boolean) {
                     .padding(10.dp)
             )
         }
-        Text(
-            text = "Feed Articles",
-            color = Color.White,
-            fontSize = 40.sp,
-            fontWeight = FontWeight.Bold
+        AnimatedVisibility(
+            visible = isLoading,
+            enter = slideInVertically(
+                initialOffsetY = { 1000 },
+                animationSpec = tween(1000)
+            ) + fadeIn(animationSpec = tween(1000)),
+            exit = fadeOut(animationSpec = tween(700)) + slideOutVertically(
+                animationSpec = tween(700),
+                targetOffsetY = { 400 }
+            )
+        ) {
+            Text(
+                text = "Feed Articles",
+                color = Color.White,
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold
 
-        )
+            )
+        }
     }
 }
 
